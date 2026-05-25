@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup System</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS YAKO ILE ILE */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-image: url(beach5.jpg); background-repeat: no-repeat; background-position: center; background-size: cover; width: 100%; overflow: hidden; }
+        .ring { position: relative; width: 500px; height: 500px; display: flex; justify-content: center; align-items: center; }
+        .ring i { position: absolute; inset: 0; border: 2px solid #fff; transition: 0.5s; }
+        .ring i:nth-child(1){ border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%; animation: animate 6s linear infinite; }
+        .ring i:nth-child(2){ border-radius: 41% 44% 56% 59%/38% 62% 63% 37%; animation: animate 4s linear infinite; }
+        .ring i:nth-child(3){ border-radius: 41% 44% 56% 59%/38% 62% 63% 37%; animation: animate2 10s linear infinite; }
+        .ring:hover i{ border: 6px solid var(--clr); filter: drop-shadow(0 0 20px var(--clr)); }
+        @keyframes animate { 0%{ transform: rotate(0deg); } 100%{ transform: rotate(360deg); } }
+        @keyframes animate2{ 0%{ transform: rotate(360deg); } 100%{ transform: rotate(0deg); } }
+        
+        .login { position: absolute; width: 300px; display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 20px; }
+        .login h2 { font-size: 2em; color: #fff; }
+        .inputBx { position: relative; width: 100%; }
+        .inputBx input { width: 100%; padding: 12px 20px; background: transparent; border: 2px solid #fff; border-radius: 40px; font-size: 1.2em; color: #fff; outline: none; }
+        .inputBx input[type="submit"], button { width: 100%; cursor: pointer; padding: 12px; border-radius: 40px; border: 2px solid #fff; background: #fff; font-weight: bold; }
+        .links { width: 100%; display: flex; justify-content: space-between; padding: 0 20px; }
+        .links span { color: #fff; cursor: pointer; text-decoration: none; font-size: 14px; }
+        .login .links a,.login .links span {color: #fff;text-decoration: none;
+    cursor: pointer;
+}
+        .hidden { display: none; }
+
+        @media (max-width: 480px) {
+    .ring {
+        width: 300px;  /* Tunapunguza ukubwa wa duara */
+        height: 300px;
+    }
+    
+    .login {
+        width: 250px; /* Tunapunguza upana wa fomu */
+    }
+
+    .login h2 {
+        font-size: 1.5em; /* Tunapunguza saizi ya maandishi ya kichwa */
+    }
+
+    .inputBx input {
+        font-size: 1em; /* Maandishi ya ndani yawe madogo kidogo */
+        padding: 10px 15px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <div class="ring">
+        <i style="--clr:#07f70f;"></i>
+        <i style="--clr:#3fc7fd;"></i>
+        <i style="--clr:#1a34b7;"></i>
+
+        <div class="login" id="loginForm">
+            <h2>Login</h2>
+            <div class="inputBx"><input type="text" id="logUser" placeholder="Username"></div>
+            <div class="inputBx"><input type="password" id="logPass" placeholder="Password"></div>
+            <div class="inputBx"><button onclick="handleLogin()">Sign in</button></div>
+            <div class="links">
+            <span onclick="toggleForgot()" style="color: red;">Forget Password?</span>
+            <span onclick="toggleForm()">Signup</span>
+</div>
+        </div>
+
+        <div class="login hidden" id="signupForm">
+            <h2>Signup</h2>
+            <div class="inputBx"><input type="text" id="signUser" placeholder="Full Name"></div>
+            <div class="inputBx"><input type="password" id="signPass" placeholder="Password"></div>
+            <div class="inputBx"><button onclick="handleSignup()">Register</button></div>
+            <div class="links">
+                <span></span>
+                <span onclick="toggleForm()">Back to Login</span>
+            </div>
+        </div>
+    </div>
+    <div class="login hidden" id="forgotForm">
+    <h2>Reset Password</h2>
+    <div class="inputBx"><input type="text" id="forgotUser" placeholder="Enter Username"></div>
+    <div class="inputBx"><input type="password" id="newPass" placeholder="New Password"></div>
+    <div class="inputBx"><button onclick="handleReset()">Update Password</button></div>
+    <div class="links">
+        <span onclick="toggleForgot()">Back to Login</span>
+    </div>
+</div>
+
+    <script>
+        function toggleForm() {
+            document.getElementById('loginForm').classList.toggle('hidden');
+            document.getElementById('signupForm').classList.toggle('hidden');
+        }
+
+        function handleSignup() {
+            const name = document.getElementById('signUser').value;
+            const pass = document.getElementById('signPass').value;
+            if(name && pass) {
+                localStorage.setItem('user', JSON.stringify({name, pass}));
+                alert("Usajili umekamilika!");
+                toggleForm();
+            }
+        }
+
+        function handleLogin() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const username = document.getElementById('logUser').value;
+            const pass = document.getElementById('logPass').value;
+            if (user && username === user.name && pass === user.pass) {
+                alert("Karibu " + user.name);
+            } else {
+                alert("Taarifa si sahihi!");
+            }
+        }
+        // Function ya ku-toggle form ya forgot password
+    function toggleForgot() {
+    document.getElementById('loginForm').classList.toggle('hidden');
+    document.getElementById('forgotForm').classList.toggle('hidden');
+}
+
+// Function ya kubadilisha nenosiri
+function handleReset() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const inputUser = document.getElementById('forgotUser').value;
+    const newPass = document.getElementById('newPass').value;
+
+    if (user && inputUser === user.name) {
+        // Tunahifadhi nenosiri jipya kwenye localStorage
+        localStorage.setItem('user', JSON.stringify({name: user.name, pass: newPass}));
+        alert("Nenosiri limebadilishwa kwa mafanikio!");
+        toggleForgot();
+    } else {
+        alert("Username haijulikani!");
+    }
+}
+    </script>
+</body>
+</html>
